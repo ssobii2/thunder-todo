@@ -1,3 +1,6 @@
+import { Checkbox } from '~/components/ui/checkbox';
+import { Button } from '~/components/ui/button';
+import { Trash2 } from 'lucide-react';
 import { Todo } from '../types';
 
 interface TodoItemProps {
@@ -9,10 +12,9 @@ interface TodoItemProps {
 export function TodoItem({ todo, onToggle, onDelete }: TodoItemProps) {
   return (
     <div className="todo-item">
-      <input
-        type="checkbox"
+      <Checkbox
         checked={todo.completed}
-        onChange={() => onToggle(todo.id, !todo.completed)}
+        onCheckedChange={() => onToggle(todo.id, !todo.completed)}
         aria-label={`Mark "${todo.title}" as ${todo.completed ? 'active' : 'completed'}`}
       />
       <span
@@ -20,9 +22,14 @@ export function TodoItem({ todo, onToggle, onDelete }: TodoItemProps) {
       >
         {todo.title}
       </span>
-      <button onClick={() => onDelete(todo.id)} aria-label={`Delete "${todo.title}"`}>
-        Delete
-      </button>
+      <Button
+        variant="destructive"
+        size="icon"
+        onClick={() => onDelete(todo.id)}
+        aria-label={`Delete "${todo.title}"`}
+      >
+        <Trash2 className="h-4 w-4" />
+      </Button>
     </div>
   );
 }
