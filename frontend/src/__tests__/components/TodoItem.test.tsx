@@ -54,15 +54,30 @@ describe('TodoItem', () => {
     expect(onDelete).toHaveBeenCalledWith('todo-1');
   });
 
-  it('applies line-through style when todo is completed', () => {
+  // Regression: completed state uses CSS class on the div (not inline style on the span)
+  it('completed todo has line-through via CSS class on the container', () => {
     render(<TodoItem todo={completedTodo} onToggle={() => {}} onDelete={() => {}} />);
-    const span = screen.getByText('Buy groceries');
-    expect(span).toHaveStyle({ textDecoration: 'line-through' });
+    const container = screen.getByText('Buy groceries').parentElement;
+    expect(container).toHaveClass('completed');
   });
 
-  it('does not apply line-through style when todo is not completed', () => {
+  it('non-completed todo does not have the completed class', () => {
     render(<TodoItem todo={mockTodo} onToggle={() => {}} onDelete={() => {}} />);
-    const span = screen.getByText('Buy groceries');
-    expect(span).toHaveStyle({ textDecoration: 'none' });
+    const container = screen.getByText('Buy groceries').parentElement;
+    expect(container).not.toHaveClass('completed');
+  });
+
+  // Regression: delete button must have className="delete-btn" for CSS targeting
+  it('delete button has className="delete-btn" so it can be styled via CSS', () => {
+    render(<TodoItem todo={mockTodo} onToggle={() => {}} onDelete={() => {}} />);
+    const deleteBtn = screen.getByRole('button', { name: /delete/i });
+    expect(deleteBtn).toHaveClass('delete-btn');
+  });
+
+  // Regression: completed state is applied via CSS class on the container div, not inline style on the span
+  it('completed todo renders the div with className containing "completed"', () => {
+    render(<TodoItem todo={completedTodo} onToggle={() => {}} onDelete={() => {}} />);
+    const container = screen.getByText('Buy groceries').parentElement;
+    expect(container).toHaveClass('completed');
   });
 });

@@ -99,15 +99,15 @@ describe('App integration tests', () => {
     });
   });
 
-  it('shows Loading... while API call is in flight', async () => {
+  it('shows skeleton loader while API call is in flight', async () => {
     let resolve!: (value: Todo[]) => void;
     mockFetchTodos.mockReturnValueOnce(new Promise((r) => { resolve = r; }));
 
     render(<App />);
-    expect(screen.getByText('Loading...')).toBeInTheDocument();
+    expect(screen.getByLabelText('Loading todos')).toBeInTheDocument();
 
     resolve([]);
-    await waitFor(() => expect(screen.queryByText('Loading...')).not.toBeInTheDocument());
+    await waitFor(() => expect(screen.queryByLabelText('Loading todos')).not.toBeInTheDocument());
   });
 
   it('shows error message when API call rejects', async () => {
@@ -119,12 +119,13 @@ describe('App integration tests', () => {
     });
   });
 
-  it('shows empty state when no todos match the filter', async () => {
+  it('shows illustrated empty state when no todos match the filter', async () => {
     mockFetchTodos.mockResolvedValue([]);
 
     render(<App />);
     await waitFor(() => {
-      expect(screen.getByText('No todos here!')).toBeInTheDocument();
+      expect(screen.getByText('No todos yet')).toBeInTheDocument();
+      expect(screen.getByText('Add a task above to get started')).toBeInTheDocument();
     });
   });
 });

@@ -7,6 +7,26 @@ import type { Todo } from './types';
 
 type Filter = 'all' | 'active' | 'completed';
 
+function SkeletonLoader() {
+  return (
+    <div className="skeleton-loader" aria-label="Loading todos" aria-busy="true">
+      <div className="skeleton-line" />
+      <div className="skeleton-line" />
+      <div className="skeleton-line" />
+    </div>
+  );
+}
+
+function EmptyState() {
+  return (
+    <div className="empty-state" role="status">
+      <div className="empty-state-icon" aria-hidden="true">📋</div>
+      <p className="empty-state-title">No todos yet</p>
+      <p className="empty-state-subtitle">Add a task above to get started</p>
+    </div>
+  );
+}
+
 export default function App() {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<Filter>('all');
@@ -65,22 +85,29 @@ export default function App() {
 
       <FilterBar current={filter} onChange={setFilter} />
 
-      {loading && <span>Loading...</span>}
+      <div aria-live="polite">
+        {loading && <SkeletonLoader />}
+      </div>
 
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-
-      {!loading && todos.length === 0 && (
-        <p className="empty">No todos here!</p>
+      {error && (
+        <p className="error-message" role="alert" aria-live="assertive">
+          {error}
+        </p>
       )}
 
-      {todos.map((todo) => (
-        <TodoItem
-          key={todo.id}
-          todo={todo}
-          onToggle={(id, completed) => { void handleToggle(id, completed); }}
-          onDelete={(id) => { void handleDelete(id); }}
-        />
-      ))}
+      {!loading && todos.length === 0 && <EmptyState />}
+
+      <ul className="todo-list" aria-label="Todo list">
+        {todos.map((todo) => (
+          <li key={todo.id}>
+            <TodoItem
+              todo={todo}
+              onToggle={(id, completed) => { void handleToggle(id, completed); }}
+              onDelete={(id) => { void handleDelete(id); }}
+            />
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

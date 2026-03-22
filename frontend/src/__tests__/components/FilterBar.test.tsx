@@ -48,4 +48,11 @@ describe('FilterBar', () => {
     render(<FilterBar current="all" onChange={() => {}} />);
     expect(screen.getByRole('button', { name: /^all$/i })).toHaveClass('active');
   });
+
+  // Regression: the container div must have className="filter-bar" so it can be styled via CSS
+  it('renders the filter container with className="filter-bar"', () => {
+    const { container } = render(<FilterBar current="all" onChange={() => {}} />);
+    const filterBar = container.querySelector('.filter-bar');
+    expect(filterBar).not.toBeNull();
+  });
 });

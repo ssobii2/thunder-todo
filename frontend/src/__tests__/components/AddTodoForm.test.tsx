@@ -55,4 +55,11 @@ describe('AddTodoForm', () => {
     await userEvent.type(screen.getByRole('textbox'), 'Press enter{Enter}');
     expect(onAdd).toHaveBeenCalledWith('Press enter');
   });
+
+  // Regression: the form element must have className="add-todo-form" so the CSS rule applies
+  it('renders the form with className="add-todo-form"', () => {
+    const { container } = render(<AddTodoForm onAdd={() => {}} />);
+    const form = container.querySelector('.add-todo-form');
+    expect(form).not.toBeNull();
+  });
 });
