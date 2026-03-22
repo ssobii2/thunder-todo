@@ -1,4 +1,6 @@
 import { useState, FormEvent } from 'react';
+import { Input } from '../../components/ui/input';
+import { Button } from '../../components/ui/button';
 
 interface AddTodoFormProps {
   onAdd: (title: string) => void;
@@ -17,14 +19,15 @@ export function AddTodoForm({ onAdd }: AddTodoFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="add-todo-form">
-      <input
-        type="text"
+      <Input
         value={value}
-        onChange={(e) => setValue(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
         placeholder="What needs to be done?"
         aria-label="New todo title"
       />
-      <button type="submit">Add</button>
+      <Button type="submit" variant="default">
+        Add
+      </Button>
     </form>
   );
 }
