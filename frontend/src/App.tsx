@@ -59,12 +59,17 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-muted flex items-center justify-center p-4">
-      <Card className="w-full max-w-lg shadow-xl">
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">
-            Thunder Todo
-          </CardTitle>
+    <div className="min-h-screen bg-gradient-to-br from-background to-muted/50 flex items-center justify-center p-4">
+      <Card className="w-full max-w-lg shadow-2xl shadow-black/10 border-border/50 bg-card/95 backdrop-blur-sm">
+        <CardHeader className="pb-4">
+          <div className="flex items-center justify-center gap-2">
+            <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center">
+              <span className="text-primary-foreground text-sm font-bold">⚡</span>
+            </div>
+            <CardTitle className="text-2xl font-bold text-center tracking-tight">
+              Thunder Todo
+            </CardTitle>
+          </div>
         </CardHeader>
         <CardContent className="space-y-6">
           <AddTodoForm onAdd={(title) => { void handleAdd(title); }} />
