@@ -1,0 +1,42 @@
+# Progress Log
+Run: fabf0b3f-e5b9-445d-8ebb-a7962fdcc55b
+Task: Add Shadcn UI to repo ssobii2/thunder-todo — upgrade frontend UI with Shadcn, replace components, keep functionality, open PR
+Started: 2026-03-22
+
+## Codebase Patterns
+- Frontend is Vite + React + TypeScript in `frontend/` directory
+- Tests use Vitest + React Testing Library, run with `npm test`
+- Build: `npm run build`, Typecheck: `npm run typecheck`
+- Existing tests: 6 test files, 46 tests all passing
+- Shadcn components go in `frontend/components/ui/` with `lib/utils.ts` providing `cn()`
+- Tailwind config: content paths `['./index.html', './src/**/*.{ts,tsx}']`
+- Shadcn uses `~` path alias (defined in tsconfig paths as `"~/*": ["./*"]`) for `~/components/ui/*` and `~/lib/utils`
+- Vite config must include `resolve.alias` for `~` to work at runtime (not just compile time)
+- `@tailwind` directives must be at top of `frontend/src/index.css` (before existing plain CSS)
+- Shadcn adds radix-ui primitives as peer deps
+- Vite config uses `import.meta.url` / `fileURLToPath` for the `~` alias (not `__dirname`)
+
+---
+## 2026-03-22 - US-001: Install Shadcn UI, Tailwind CSS, and components
+- Verified all acceptance criteria already met (Shadcn was already installed and committed)
+- Ran typecheck: passed (tsc --noEmit, no errors)
+- Ran build: passed (vite build, 2.64s)
+- Ran tests: 46/46 passed (6 test files)
+- Committed: `feat: US-001 - Install Shadcn UI, Tailwind CSS, and components` (6d80cdd)
+- Files: frontend/package.json, frontend/package-lock.json, frontend/src/index.css, frontend/components.json, frontend/components/ui/{badge,button,card,checkbox,input}.tsx, frontend/lib/utils.ts, frontend/postcss.config.js, frontend/tailwind.config.js
+- **Learnings:** Shadcn init was already done but not committed. All components and utils were scaffolded. No new tests needed since this story was installation/configuration only.
+
+## 2026-03-22 - US-002: Refactor AddTodoForm to use Shadcn Input + Button
+- Replaced plain `<input type="text">` with Shadcn `<Input>` component from `~/components/ui/input`
+- Replaced plain `<button type="submit">` with Shadcn `<Button type="submit" variant="default">` from `~/components/ui/button`
+- Preserved all behavior: submit on Enter, trim whitespace, block empty submit, clear on success
+- Kept `className="add-todo-form"` on form element for layout targeting
+- Added explicit `React.ChangeEvent<HTMLInputElement>` type annotation on onChange handler
+- Fixed: `~/` alias not in tsconfig (added `baseUrl` + `paths` to tsconfig.json)
+- Fixed: `~/` alias not in vite.config (added `resolve.alias` using `fileURLToPath`)
+- Ran typecheck: passed
+- Ran build: passed (vite build, 1.92s)
+- Ran tests: 46/46 passed (including 7 AddTodoForm tests — all pass with Shadcn components)
+- Committed: `feat: US-002 - Refactor AddTodoForm to use Shadcn Input + Button` (c7b8182)
+- Files: frontend/src/components/AddTodoForm.tsx, frontend/tsconfig.json, frontend/vite.config.ts
+- **Learnings:** Shadcn `Input` and `Button` work seamlessly with existing tests via RTL (textbox/button roles unchanged). The `~` alias must be configured in both tsconfig (for tsc) and vite.config (for vitest runtime). The existing AddTodoForm tests fully cover acceptance criteria — no new tests needed.

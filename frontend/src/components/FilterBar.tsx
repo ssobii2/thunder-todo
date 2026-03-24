@@ -16,7 +16,7 @@ const FILTERS: { label: string; value: Filter }[] = [
 
 export function FilterBar({ current, onChange }: FilterBarProps) {
   return (
-    <div className="filter-bar">
+    <div className="flex gap-2" role="group" aria-label="Filter todos">
       {FILTERS.map(({ label, value }) => {
         const isActive = current === value;
         if (isActive) {
@@ -27,7 +27,7 @@ export function FilterBar({ current, onChange }: FilterBarProps) {
               role="button"
               onClick={() => onChange(value)}
               aria-pressed={true}
-              className="cursor-pointer"
+              className="cursor-pointer px-3 py-1 text-xs font-medium focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             >
               {label}
             </Badge>
@@ -40,6 +40,7 @@ export function FilterBar({ current, onChange }: FilterBarProps) {
             size="sm"
             onClick={() => onChange(value)}
             aria-pressed={false}
+            className="text-xs px-3 py-1 h-auto focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
           >
             {label}
           </Button>

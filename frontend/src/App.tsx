@@ -3,6 +3,7 @@ import { fetchTodos, createTodo, toggleTodo, deleteTodo } from './api';
 import { AddTodoForm } from './components/AddTodoForm';
 import { FilterBar } from './components/FilterBar';
 import { TodoItem } from './components/TodoItem';
+import { Card, CardHeader, CardTitle, CardContent } from '~/components/ui/card';
 import type { Todo } from './types';
 
 type Filter = 'all' | 'active' | 'completed';
@@ -58,29 +59,37 @@ export default function App() {
   };
 
   return (
-    <div className="app">
-      <h1>Thunder Todo</h1>
+    <div className="min-h-screen bg-muted flex items-center justify-center p-4">
+      <Card className="w-full max-w-lg shadow-xl">
+        <CardHeader>
+          <CardTitle className="text-2xl font-bold text-center">
+            Thunder Todo
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <AddTodoForm onAdd={(title) => { void handleAdd(title); }} />
+          <FilterBar current={filter} onChange={setFilter} />
 
-      <AddTodoForm onAdd={(title) => { void handleAdd(title); }} />
+          {loading && <p className="text-center text-muted-foreground py-4">Loading...</p>}
 
-      <FilterBar current={filter} onChange={setFilter} />
+          {error && <p className="text-destructive text-sm">{error}</p>}
 
-      {loading && <span>Loading...</span>}
+          {!loading && todos.length === 0 && (
+            <p className="text-center text-muted-foreground py-8">No todos here!</p>
+          )}
 
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-
-      {!loading && todos.length === 0 && (
-        <p className="empty">No todos here!</p>
-      )}
-
-      {todos.map((todo) => (
-        <TodoItem
-          key={todo.id}
-          todo={todo}
-          onToggle={(id, completed) => { void handleToggle(id, completed); }}
-          onDelete={(id) => { void handleDelete(id); }}
-        />
-      ))}
+          <div className="space-y-2">
+            {todos.map((todo) => (
+              <TodoItem
+                key={todo.id}
+                todo={todo}
+                onToggle={(id, completed) => { void handleToggle(id, completed); }}
+                onDelete={(id) => { void handleDelete(id); }}
+              />
+            ))}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

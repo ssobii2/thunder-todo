@@ -18,14 +18,19 @@ export function AddTodoForm({ onAdd }: AddTodoFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="add-todo-form">
+    <form onSubmit={handleSubmit} className="flex gap-2">
       <Input
         value={value}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
         placeholder="What needs to be done?"
         aria-label="New todo title"
+        className="flex-1 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
       />
-      <Button type="submit" variant="default">
+      <Button
+        type="submit"
+        variant="default"
+        className="shrink-0 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+      >
         Add
       </Button>
     </form>
