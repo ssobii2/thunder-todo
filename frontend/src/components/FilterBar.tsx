@@ -1,6 +1,3 @@
-import { Badge } from '~/components/ui/badge';
-import { Button } from '~/components/ui/button';
-
 type Filter = 'all' | 'active' | 'completed';
 
 interface FilterBarProps {
@@ -19,31 +16,19 @@ export function FilterBar({ current, onChange }: FilterBarProps) {
     <div className="flex gap-2" role="group" aria-label="Filter todos">
       {FILTERS.map(({ label, value }) => {
         const isActive = current === value;
-        if (isActive) {
-          return (
-            <Badge
-              key={value}
-              variant="default"
-              role="button"
-              onClick={() => onChange(value)}
-              aria-pressed={true}
-              className="cursor-pointer px-3 py-1 text-xs font-medium focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-            >
-              {label}
-            </Badge>
-          );
-        }
         return (
-          <Button
+          <button
             key={value}
-            variant="ghost"
-            size="sm"
             onClick={() => onChange(value)}
-            aria-pressed={false}
-            className="text-xs px-3 py-1 h-auto focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+            aria-pressed={isActive}
+            className={`px-4 py-1.5 rounded-full text-xs font-medium transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900 ${
+              isActive
+                ? 'bg-blue-500 text-white shadow-sm'
+                : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-slate-200'
+            }`}
           >
             {label}
-          </Button>
+          </button>
         );
       })}
     </div>
